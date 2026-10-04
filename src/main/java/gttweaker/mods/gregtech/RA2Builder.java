@@ -11,8 +11,8 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
 import gttweaker.GTTweaker;
-import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
+import minetweaker.OneWayAction;
 import minetweaker.annotations.ModOnly;
 import minetweaker.api.item.IIngredient;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -143,7 +143,7 @@ public class RA2Builder {
         MineTweakerAPI.apply(new RecipeAddAction(recipe, map));
     }
 
-    public static class RecipeAddAction implements IUndoableAction {
+    public static class RecipeAddAction extends OneWayAction {
 
         GTRecipe recipe;
         RecipeMap<?> map;
@@ -159,24 +159,8 @@ public class RA2Builder {
         }
 
         @Override
-        public boolean canUndo() {
-            return true;
-        }
-
-        @Override
-        public void undo() {
-            map.getBackend()
-                .removeRecipe(recipe);
-        }
-
-        @Override
         public String describe() {
             return "RA2 - Adding recipe";
-        }
-
-        @Override
-        public String describeUndo() {
-            return "RA2 - Removing recipe";
         }
 
         @Override
